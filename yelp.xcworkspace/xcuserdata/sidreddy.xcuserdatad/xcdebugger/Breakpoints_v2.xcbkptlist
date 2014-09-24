@@ -10,28 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "yelp/YelpSearchViewController.swift"
-            timestampString = "433069277.208446"
+            timestampString = "433202507.765501"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
-            landmarkName = "getYelpResults()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "yelp/FilterViewController.swift"
-            timestampString = "433152367.195133"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
-            landmarkName = "tableView(_:cellForRowAtIndexPath:)"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "getYelpResults(_:categories:sort:radius:deals:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

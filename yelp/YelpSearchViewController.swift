@@ -20,6 +20,8 @@ class YelpSearchViewController: UIViewController, UITableViewDelegate, UITableVi
     let yelpTokenSecret = "mqtKIxMIR4iBtBPZCmCLEb-Dz3Y"
     var businesses: [NSDictionary] = []
     
+    var defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -30,14 +32,36 @@ class YelpSearchViewController: UIViewController, UITableViewDelegate, UITableVi
         // Position search bar in navigation bar
         self.navigationItem.titleView = searchBar
         
-        getYelpResults()
-    }
-    
-    func getYelpResults() {
-        // Call YelpClient to get results
+        // Initialize Yelp client
         client = YelpClient(consumerKey: yelpConsumerKey, consumerSecret: yelpConsumerSecret, accessToken: yelpToken, accessSecret: yelpTokenSecret)
         
-        client.searchWithTerm("Thai",
+        // Take control of searchBar
+        searchBar.delegate = self
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        getYelpResults("Thai")
+    }
+    
+    func getYelpResults(searchTerm: String) {
+        var categories: String? = defaults.stringForKey("categories")
+        categories = categories != nil ? categories : "active"
+        
+        var radius: Int = defaults.integerForKey("radius")
+        radius = radius != 0 ? radius : 1000
+        
+        getYelpResults(searchTerm,
+            categories: categories!,
+            sort: defaults.integerForKey("sortby"),
+            radius: radius,
+            deals: defaults.boolForKey("deals"))
+    }
+    
+    func getYelpResults(searchTerm: String, categories: String, sort: Int = 0, radius: Int = 1000, deals: Bool = false) {
+        // Call YelpClient to get results
+        var parameters = ["term": searchTerm, "categories": categories, "sort": sort, "radius": radius,
+        "deals": deals, "location": "San Francisco"] as [String: AnyObject]
+        client.searchWithTerm(parameters,
             success:
             { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
                 var yelpInfo = response as NSDictionary!
@@ -49,7 +73,7 @@ class YelpSearchViewController: UIViewController, UITableViewDelegate, UITableVi
                 println(error)
         })
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -95,5 +119,11 @@ extension YelpSearchViewController: UITableViewDataSource {
         cell.addressLabel.text = address[0]
         
         return cell
+    }
+}
+
+extension YelpSearchViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        getYelpResults(searchBar.text)
     }
 }
